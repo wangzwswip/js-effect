@@ -4,77 +4,28 @@
         <meta charset="UTF-8">
         <title>test</title>
         <style>
-            .t1 {
-                background-color: aquamarine;
-                /* overflow: hidden; */
-                overflow: auto;
-            }
-            .t2 {
-                background-color: brown;
-                width: 100px;
-                height: 100px;
-                float: left;
-            }
-            /* .t1::after {
-                display: block;
-                content: "";
-                clear: both;
-            } */
-            .t3 {
-                background-color: coral;
+            .clock {
+                width: 500px;
                 height: 500px;
-                width: 300px;
-                /* text-align: center; */
-            }
-            .t4 {
-                background-color: rgb(165, 56, 17);
-                height: 100px;
-                width: 150px;
-                margin: 0 auto;
-            }
-            .flex {
-                background-color: rgb(43, 150, 109);
-                height: 100px;
-                width: 150px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-            .trans {                
+                /* margin-left: 50%; */
+                transform: translateY(-50%);
+                margin-top: 300px;
+                background: rgba(0, 0, 0, 0.3);
                 position: absolute;
-                left: 50%;
-                top: 50%;
-                
-                width: 0px;
-                height: 0px;
-                border:90px solid;
-                border-color: transparent transparent purple transparent;
-                /* border-bottom: 200px solid #cc7eb1;
-                border-left: 200px solid transparent;
-                border-right: 200px solid transparent; */
+                top: 30px;
+                left: 40%;
+            }
+            #solar {
+                position: absolute;
+                top: 100px;
+                left: 100px;
             }
         </style>
         
     </head>
     <body>
-        <div class="t1">
-            这是t1
-            <div class="t2">
-                这事t2
-            </div>
-            <!-- <div class="clear"></div> -->
-        </div>
-        <div class="t3" >
-            <div style="background-color: darkgreen; width: 180px; height: 50px; text-align: center; line-height: 50px;"><span>行内元素：居中</span></div>
-            <div class="t4">块级元素：我要水平居中</div>
-            <div class="flex" >
-                <div id="test"><h1 >flex布局居中</h1></div>
-                <span>子节点2</span>
-                <div>子节点3</div>
-            </div>
-            <div class="trans">移动的方式</div>
-        </div>
-        <div>
+        
+        <div class="clock">
             <canvas id="solar" width="300" height="300"></canvas>
         </div>
         <script type="text/javascript">
