@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>网页日历</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+            font-size: 14px;
+        }
+        
+        li{
+            list-style: none;
+        }
+        .body{
+            background: rgba(0, 0, 0,0.1); 
+            width: 300px;
+            border: 1px solid #000000;
+            margin: 20px auto;
+            /* height: 500px; */
+        }
+        .head1{
+            width: 100%;
+            /* height: 30px; 
+            background-color: blue;  */  
+        }
+        .head1>ul{
+            margin: 2px 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .head1>ul>li{
+            display: inline-block;
+        }
+        /* 
+        .head1>ul:nth-child(3){
+            float: right;
+        } */
+        .head2{
+            width: 100%;
+            /* height: 30px; */
+            margin: 2px 0px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+        }
+        .head3 {
+            width: 100%;
+            background-color: rgba(0, 0, 0,0.3);
+            margin: 3px 0px;
+            /* height: 30px; 
+            background-color: rgb(86, 201, 134);*/
+        }
+        .head3>ul{
+            margin: 2px 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .head1>u3>li{
+            display: inline-block;
+        }
+        .content{
+            width: 100%;
+            /* height: 300px; */
+        }
+        .content>ul{
+            margin: 2px 5px;
+            display: flex;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .content>ul>li{
+            display: inline-block;
+            width: 34px;
+            height: 34px;
+            margin: 1px 1px;
+            border: 2px solid rgba(0,0,0,0);
+            line-height: 34px;
+            text-align: center;
+        }
+        .content>ul>li.hover:hover{
+            border: 2px solid red;
+       }
+        /* #date>li{
+            float: left;
+            width: 34px;
+            height: 34px;
+            margin: 1px 1px;
+            border: 2px solid rgba(0,0,0,0);
+            line-height: 34px;
+            text-align: center;
+            cursor: pointer;
+        }
+        #date:hover{
+            border: 2px solid red;
+        }*/
+        .active{
+            color: red;
+        }  
+    </style>
+</head>
+<body>
+<div class="body" id="data">
+    <div class="head1">
+        <ul >
+            <li id="prev" style="color: red;">上个月</li>
+            <li id="year"></li>
+            <li id=""><a id="next">下个月</a></li>
+        </ul>
+    </div>
+    <div class="head2">
+        <h5 id="month"></h5>
+    </div>
+    <div class="head3">
+        <ul id="title">
+            <li>日</li>
+            <li>一</li>
+            <li>二</li>
+            <li>三</li>
+            <li>四</li>
+            <li>五</li>
+            <li>六</li>
+        </ul>
+    </div>
+    <div class="content">
+        <ul id="date">
+            
+        </ul>
+    </div>
+    
+</div>
+<script>
+    
+    let date = new Date(); //获取默认时间对象
+    add();//当页面第一次进入渲染一下
+    function add() {
+        let cYear = date.getFullYear(); //获取当前的年龄
+        let cMonth = date.getMonth(); //获取当前月份0-11
+        let cDay = date.getDate(); //获取当前天
+        //每个月的第一天，是周几
+        let startday = new Date(cYear,cMonth,1).getDay();
+        //获取每个月的天数
+        let days = new Date(cYear,cMonth+1,-1).getDate()+1;
+
+        let arr=["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"];
+
+        document.getElementById("year").innerHTML = cYear;
+        document.getElementById("month").innerHTML = arr[cMonth];
+
+        let html = '';
+        for(var i = 0; i<startday; i++) {
+            html += '<li></li>';
+        }
+        for(var i = 0; i<=days; i++) {
+            if(i==cDay){
+                html += '<li class="active hover">'+i+'</li>';
+            }else{
+                html += '<li class="hover">'+i+'</li>';
+            }
+            
+        }
+        
+        document.getElementById("date").innerHTML = html;
+    }
+    document.getElementById("prev").onclick=function(){
+        date.setMonth(date.getMonth()-1);
+        add();
+    };
+    document.getElementById("next").onclick=function(){
+        date.setMonth(date.getMonth()+1);
+        add();
+    }
+</script>
+</body>
+</html>

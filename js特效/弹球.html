@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>弹球</title>
+    <style>
+        #dv{
+            width: 800px;
+            height: 600px;
+            position: absolute;
+            background: #ccc;
+            top: 100px;
+            left: 100px;
+        }
+    </style>
+</head>
+<body>
+    <input type="button" value="弹出球" id="btn">
+    <div id="dv"></div>
+    <script>
+        var dv = document.getElementById('dv');
+        var colors = ['red','yellow','blue','green','black','purple']
+        document.getElementById("btn").onclick=function(){
+            var ball = document.createElement("div");
+            ball.style.cssText = "position:absolute;border-radius:50%";
+            var wh = Math.floor(Math.random()*50)+30;
+            ball.style.width = wh + "px";
+            ball.style.height = wh + "px";
+            ball.style.backgroundColor=colors[Math.floor(Math.random()*colors.length)];
+
+            dv.appendChild(ball);
+            //一个是内部距离
+            var top = dv.clientHeight/2 - ball.offsetHeight/2;
+            var left = dv.clientWidth/2 - ball.offsetWidth/2;
+            ball.style.left = left + "px";
+            ball.style.top = top + "px";
+            console.log(dv.clientWidth);
+
+            var x = Math.floor(Math.random()*10)+1;
+            var y = Math.floor(Math.random()*10)+1;
+
+            setInterval(function(){
+                left += x;
+                top += y;
+                if(top<0 || top>(dv.offsetHeight-ball.offsetHeight)){
+                    y = -y;
+                }
+                if(left<0 || left>(dv.offsetWidth-ball.offsetWidth)){
+                    x = -x;
+                }
+                ball.style.left = left + "px";
+                ball.style.top = top + "px";
+            },30)
+        }
+    </script>
+    
+</body>
+</html>

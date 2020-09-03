@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>跟随鼠标移动图片</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+        #logo {
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <img id="logo" src="http://img2.imgtn.bdimg.com/it/u=1633190730,3574775808&fm=26&gp=0.jpg" alt="">
+    <script>
+        var logo = document.getElementById("logo");
+        window.onmousemove=function(e){
+            var event = e || window.event;
+            var x = event.clientX
+            var y = event.clientY
+
+            if(x<=10 || x>=(document.body.clientWidth-logo.offsetWidth)){
+                x=-300;
+            }
+            if(y<=10){
+                y = -300;
+            }
+            logo.style.left = x + "px";
+            logo.style.top = y + "px";
+        }
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>动态创建表格</title>
+    <style>
+        *{
+            padding: 0px;
+            margin: 0px;
+            /* box-sizing: border-box; */
+        }
+        body,html{
+            height: 100%;
+            width: 100%;
+        }
+        .content{
+            background: rgb(174, 228, 174);
+            margin: 40px auto;
+            width: 600px;
+        }
+
+    </style>
+</head>
+<body>
+    <script>
+        
+    </script>
+    <div class="content">
+        <div class="head">
+            <input type="button" value="添加数据" id="j_btnAddData" class="btnAdd">
+        </div>
+        
+    
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>课程名称</th>
+                    <th>所属学院</th>
+                    <th>已学会</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>javascript</td>
+                    <td>学习园地-前端与移动开发学院</td>
+                    <td><a href="#" class="get">GET</a></td>
+                </tr>
+                <tr>
+                    <td>css</td>
+                    <td>前端css</td>
+                    <td><a href="#" class="get">GET</a></td>
+                </tr>
+                <tr>
+                    <td>html</td>
+                    <td>前端html</td>
+                    <td><a href="#" class="get">GET</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="mask" id="j_mask"></div>
+        <div class="form-add" id="j_formAdd">
+            <div class="form-add-title">
+                <span>添加数据</span>
+                <div id="j_hideFormAdd">x</div>
+            </div>
+            <div class="form-item">
+                <label for="j_txtLesson" class="lb">课程名称：</label>
+                <input type="text" class="txt" name="" id="j_txtLesson" placeholder="请输入课程名称">
+            </div>
+            <div class="form-item">
+                <label for="j_txtBelSch" class="lb">所属学院：</label>
+                <input type="text" class="txt" id="j_txtBelSch" placeholder="学习园地-前端与移动开发学院">
+            </div>
+            <div class="form-submit">
+                <input type="button" value="添加" id="j_btnAdd">
+            </div>
+        </div>
+    </div>
+</body>
+</html>
