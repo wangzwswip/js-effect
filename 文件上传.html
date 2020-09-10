@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .dropArea {
+      border: 1px dashed;
+      height: 150px;
+      width: 150px;
+    }
+  </style>
+</head>
+<body>
+  <section>
+    <!-- 添加 multiple 属性，可以同时选择多个文件 webkitdirectory 选择文件夹-->
+    <input type="file" multiple id="uploadFile">
+    <input type="file" multiple id="Directory" webkitdirectory>
+    <section class="dropArea" id="dropArea">把文件拽进来</section>
+  </section>
+  <script type="text/javascript">
+    // 上传文件、文件夹和拖曳上传
+    // var upfile = document.getElementById("uploadFile")
+    document.getElementById("uploadFile").addEventListener("change",function (e) {
+      var files = e.target.files;
+      for (var i = 0; i <= files.length - 1; i++) {
+        var file = files[i];  // File 对象
+        console.log(file.name);
+      }
+      console.log("change");
+    });
+    document.getElementById("Directory").addEventListener("change",function (e) {
+      // 示例一个FormData借助XHR直接上传，不用FileReader，直接传file对象即可
+      var formData = new FormData();
+      var files = e.target.files;
+      for (var i = 0; i <= files.length - 1; i++) {
+        var file = files[i];  // File 对象
+        console.log(file.name);
+        formData.append("file" + i, file);
+      }
+      console.log("change");
+      var xhr = new XMLHttpRequest();
+      //上传文件进度条
+      xhr.upload.addEventListener("progress", function(e){
+        console.log('9999')
+        if (e.total > 0) {
+          console.log('----进度-----')
+          console.log(e.loaded, e.total)
+            e.percent = Math.round(e.loaded / e.total * 100);
+            console.log( e.percent)
+            console.log('----进度-----')
+        } 
+      }, false); 
+      // var url = 'http://courseware.xesv5.com/api/OnlineEdit/upload'
+      // xhr.open('post', url, true);
+      // xhr.onload = function () {
+      //   console.log('上传完成')
+      // }
+      // xhr.send(formData);
+    });
+    document.getElementById("dropArea").addEventListener("dragover",function (e) {
+      e.preventDefault();
+    });
+    document.getElementById("dropArea").addEventListener("drop",function (e) {
+      let items = e.dataTransfer.items;
+      for (let i = 0; i <= items.length - 1; i++) {
+        let item = items[i];
+        if (item.kind === "file") {
+          let entry = item.webkitGetAsEntry();
+          getFileFromEntryRecursively(entry);
+          // 使用 webkitGetAsEntry 方法：获取到一个 FileSystemFileEntry 对象或 FileSystemDirectoryEntry 对象。这两种都继承自 FileSystemEntry。
+        }
+      }
+      e.preventDefault();
+    });
+    // 
+    function getFileFromEntryRecursively(entry) {
+      // 使用 FileSystemEntry 对象的 isFile 属性，判断是文件还是文件夹
+      // 如果是文件的话，entry 的具体类型就是 FileSystemFileEntry，用 file 方法获得一个 File 对象
+      // FileSystemFileEntry.file(successCallback[, errorCallback]);
+      if (entry.isFile) {
+        entry.file( function (file) {
+          // successCallback 中会传入 File 对象。注意 ：这个 File 对象的相对路径是空（webkitRelativePath是空字符串），所以如果想要保留拖拽的层级结构，只能从 entry 中获取
+          // entry.fullPath 是前面带斜杠的,要把斜杠去掉的
+          var path = entry.fullPath.substring(1);
+          console.log(file, path);
+        }, function(e) {
+          console.log('错误：', e)
+        })
+      } else {
+        // 如果是文件夹的话，entry 的具体类型就是 FileSystemDirectoryEntry ，可以使用 createReader 方法获得一个 FileSystemDirectoryReader 对象
+        // reader 的 readEntries 方法，获取这个 entry 下的子级 entries
+        let reader = entry.createReader();
+        reader.readEntries( function(entries) {
+          for (var m = 0; m < entries.length; m++) {
+            getFileFromEntryRecursively(entries[m])
+          }
+        }, function (e) {
+          console.log('错误：', e)
+        })
+      }
+    }
+
+    /****************** 分段上传文件 *************************/
+    /*
+    initUpload();
+    //初始化上传
+    function initUpload() {
+      var chunk = 100 * 1024; //每片大小
+      var input = document.getElementById("file"); //input file
+      input.onchange = function (e) {
+        var file = this.files[0];
+        var query = {};
+        var chunks = [];
+        if (!!file) {
+        var start = 0;
+        //文件分片
+        for (var i = 0; i < Math.ceil(file.size / chunk); i++) {
+          var end = start + chunk;
+          chunks[i] = file.slice(start , end);
+          start = end;
+        }
+    
+        // 采用post方法上传文件
+        // url query上拼接以下参数，用于记录上传偏移
+        // post body中存放本次要上传的二进制数据
+        query = {
+          fileSize: file.size,
+          dataSize: chunk,
+          nextOffset: 0
+        }
+      
+        upload(chunks, query, successPerUpload);
+      }
+      }
+    }
+ 
+    // 执行上传
+    function upload(chunks, query, cb) {
+      var queryStr = Object.getOwnPropertyNames(query).map(key => {
+        return key + "=" + query[key];
+      }).join("&");
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "http://xxxx/opload?" + queryStr);
+      xhr.overrideMimeType("application/octet-stream");
+        
+      //获取post body中二进制数据
+      var index = Math.floor(query.nextOffset / query.dataSize);
+      getFileBinary(chunks[index], function (binary) {
+        if (xhr.sendAsBinary) {
+        xhr.sendAsBinary(binary);
+        } else {
+        xhr.send(binary);
+        }
+      
+      });
+ 
+      xhr.onreadystatechange = function (e) {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            var resp = JSON.parse(xhr.responseText);
+            // 接口返回nextoffset
+            // resp = {
+            //  isFinish:false,
+            //  offset:100*1024
+            // }
+            if (typeof cb === "function") {
+              cb.call(this, resp, chunks, query)
+            }
+          }
+        }
+      }
+    }
+ 
+    // 每片上传成功后执行
+    function successPerUpload(resp, chunks, query) {
+      if (resp.isFinish === true) {
+        alert("上传成功");
+      } else {
+        //未上传完毕
+        query.offset = resp.offset;
+        upload(chunks, query, successPerUpload);
+      }
+    }
+ 
+    // 获取文件二进制数据
+    function getFileBinary(file, cb) {
+      var reader = new FileReader();
+      reader.readAsArrayBuffer(file);
+      reader.onload = function (e) {
+        if (typeof cb === "function") {
+          cb.call(this, this.result);
+        }
+      }
+    }
+    */
+  </script>
+</body>
+</html>
