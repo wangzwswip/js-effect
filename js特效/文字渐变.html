@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文字渐变</title>
+  <style>
+    .text1 {
+      width: 200px;
+      height: 50px;
+      position: relative;
+      margin: 10px auto;
+      font-size: 36px;
+      font-weight: bold;
+      background-image: -webkit-linear-gradient(bottom, red, #fd8403, yellow); 
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent; 
+    }
+    .text2 {
+      width: 200px;
+      height: 50px;
+      position: relative;
+      margin: 10px auto;
+      font-size: 36px;
+      font-weight: bold;
+      color: yellow;
+      /* -webkit-mask : -webkit-gradient(linear, left top, right bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0))) */
+    }
+    .text2:before {
+      content: attr(text);
+      position: absolute;
+      z-index: 10;
+      color: pink;
+      -webkit-mask: linear-gradient(to left, red, transparent);
+      mask: linear-gradient(to left, red, transparent);
+    }
+    .image {
+      margin: 15px;
+      height: 200px;
+      width: 200px;
+      position: relative;
+      margin: 15px auto;
+      background: url("./images/1.jpg") no-repeat;
+      background-size: 100% 100%;
+    }
+    .mask {
+      width: 700px;
+      height: 392px;
+      position: relative;
+      margin: 10px auto;
+      background: black url("./images/6.jpg");
+      -webkit-mask-image: url("./images/7.jpg");
+      mask-image: url("./images/7.jpg");
+      animation: mask 5s linear infinite forwards;
+    }
+    @keyframes mask {
+      0% { -webkit-mask-position: 0px 0px}
+      25% { -webkit-mask-position: 619px 0px}
+      50% { -webkit-mask-position: 0px 0px}
+      75% { -webkit-mask-position: 308px 0px; -webkit-mask-size: 100% }
+      100% { -webkit-mask-size: 1000%}
+    }
+  </style>
+</head>
+
+<body>
+  <div id ="app">
+      <div class="text1">颜色渐变一</div>
+      <div class="text2" text="颜色渐变二">颜色渐变二</div>
+      <div class="image"></div>
+      <div class="mask"></div>
+  </div>
+  <script>
+    var img = document.getElementsByClassName("image")[0]
+    var imgWidth = document.getElementsByClassName('image')[0].offsetWidth
+    img.onmouseover = function () {
+      var b = 0
+      var timer = setInterval(function() {
+        if (b > parseInt(imgWidth + 50)) {clearInterval(timer)}
+        img.style.setProperty("-webkit-mask","-webkit-gradient(radial, 100 100,"+b+", 100 100, "+(b+15)+", from(rgba(255, 255, 255,1)), color-stop(0.5,rgba(255, 255, 255, 0.2)), to(rgba(255, 255, 255,1)))")
+        // img.setAttribute('style',"-webkit-mask:-webkit-gradient(radial, 100 100,"+b+", 100 100, "+(b+15)+", from(rgba(255, 255, 255,1)), color-stop(0.5,rgba(255, 255, 255, 0.2)), to(rgba(255, 255, 255,1)))")
+        b++
+      }, 0)
+    }
+    // window.onload = function () {
+    //   var img = document.getElementsByClassName("image")
+    //   console.log("进入")
+    //   img.onmouseover = function () {
+    //     var b = 0
+    //     console.log("鼠标悬浮")
+    //     var timer = setInterval(function() {
+    //       if (b > parseInt(img.width() + 50)) {clearInterval(timer)}
+    //       img.css({"-webkit-mask":"-webkit-gradient(radial, 88 53,"+b+", 88 53, "+(b+15)+", from(rgba(255, 255, 255,1)), color-stop(0.5,rgba(255, 255, 255, 0.2)), to(rgba(255, 255, 255,1)))"})
+    //       b++
+    //     }, 0)
+    //   }
+    // }
+    
+  </script>
+</body>
+
+</html>
