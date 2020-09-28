@@ -141,6 +141,7 @@
 <script>
     
     let date = new Date(); //获取默认时间对象
+    let ccMonth = date.getMonth();
     add();//当页面第一次进入渲染一下
     function add() {
         let cYear = date.getFullYear(); //获取当前的年龄
@@ -161,7 +162,7 @@
             html += '<li></li>';
         }
         for(var i = 0; i<=days; i++) {
-            if(i==cDay){
+            if(i==cDay && cMonth==ccMonth){
                 html += '<li class="active hover">'+i+'</li>';
             }else{
                 html += '<li class="hover">'+i+'</li>';
