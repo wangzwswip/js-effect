@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>jquery 整屏滚动</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style>
+  　*{
+      margin: 0!important;
+      padding: 0!important;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0!important;
+      padding: 0!important;
+      position: relative;
+      overflow: hidden;
+      background: black;
+    }
+    .box {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: red;
+    }
+    .ul-star {
+      width: 100%;
+      height: 100%;
+      color: #fff;
+      font-size: 16px;
+      position: relative;
+    }
+    .box div:nth-child(1) {
+      background: url(./images/15.jpg) no-repeat;
+      background-size: 100% 100%;
+    }
+    .box div:nth-child(2) {
+      background: url(./images/14.jpg) no-repeat;
+      background-size: 100% 100%;
+    }
+    .box div:nth-child(3) {
+      background: url(./images/13.jpg) no-repeat;
+      background-size: 100% 100%;
+    }
+    .box div:nth-child(4) {
+      background: url(./images/12.jpg) no-repeat;
+      background-size: 100% 100%;
+    }
+    .box div:nth-child(5) {
+      background: url(./images/11.jpg) no-repeat;
+      background-size: 100% 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="box" class="box" index="0">
+    <div class="ul-star">第一屏</div>
+    <div class="ul-star">第二屏</div>
+    <div class="ul-star">第三屏</div>
+    <div class="ul-star">第四屏</div>
+    <div class="ul-star">第五屏</div>
+  </div>
+</body>
+<script>
+　　$("#box").on("mousewheel",function(ev){
+　　　　var hhs = ev.originalEvent.wheelDelta;
+　　　　var fangx = hhs >0?1:0;//向下为负值
+　　　　var index = $("#box").attr("index");
+　　　　var maxpage = 4; //$("#box div").size()-1;
+　　　　if(fangx){//1,top为负值往下
+　　　　　　if(--index<0){
+　　　　　　　　return
+　　　　　　}
+　　　　}
+　　　　else{
+　　　　　　if(++index > maxpage){
+　　　　　　　　return
+　　　　　　}
+　　　　}
+　　　　if(!$(this).is(":animated")){
+　　　　　　$("#box").animate({top:"-"+index+"00%"},300)
+　　　　　　$("#box").attr("index",index)
+　　　　}
+　　})
+</script>
+</html>
