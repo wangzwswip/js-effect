@@ -1,0 +1,120 @@
+const ajax = {
+  url: "./TestXHR.aspx",              //请求地址
+  method: "POST",                       //请求方式
+  params: { name: "super", age: 20 },        //请求参数
+  dataType: "json",
+  success: function (response, xml) {
+      // 此处放成功后执行的代码
+  },
+  fail: function (status) {
+      // 此处放失败后执行的代码
+  }
+}
+export const axios = (options) => {
+  options = options || {};
+  options.method = (options.method || "GET").toUpperCase();
+  options.dataType = options.dataType || "json";
+  let params = options.params
+  if (options.dataType !== 'json') {
+    params = formatParams(options.data);
+  }
+  let promise = new Promise((resolve, reject) => {
+    let xhr = window.XMLHttpRequest ? new window.XMLHttpRequest() : ActiveXObject("Microsoft.XMLHTTP")
+    xhr.open(options.method, options.url)
+    if (options.method.toLowerCase === 'get') {
+      xhr.send()
+    } else if (options.method.toLowerCase === 'post') {
+      // xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded")
+      // xhr.setRequestHeader("Content-Type", "application/json")
+      xhr.setRequestHeader("Content-Type", options.dataType)
+      xhr.send(JSON.stringify(options.params))
+    }
+    xhr.onreadystatechange = () => {
+      // if (xhr.readyState == 4) {
+      //   var status = xhr.status;
+      //   if (status >= 200 && status < 300) {
+      //       options.success && options.success(xhr.responseText, xhr.responseXML);
+      //   } else {
+      //       options.fail && options.fail(status);
+      //   }
+      // }
+      if (xhr.readstate !== 4) return
+      if (xhr.status === 200) {
+        resolve(xhr.responseText)
+      } else {
+        reject(xhr.status)
+      }
+    }
+  })
+  return promise
+}
+const jsonp = {
+  url: "http://localhost:8080/ac/test.php",              
+  data: { q: 1 },
+  callbackName: "foo",
+  time:1,
+  success: function (json) {
+      // 此处放成功后执行的代码
+      console.log(json.name);
+
+  },
+  error: function(json){
+      console.log(json.message);
+  }  
+}
+const formatParams = function (data) {
+  let arr = []
+  for (let name in data) {
+    arr.push(encodeURIComponent(name) + "=" + encodeURIComponent(data[name]))
+  }
+  arr.push("v=" + Math.random())
+  return arr.join('&')
+}
+export const JSONP = (options) => {
+  options = options || {};
+  options.callback = options.callback || "callback";
+  if (!options.url || !options.callback) {
+    throw new Error('参数不合法')
+  }
+  let promise = new Promise((resolve, reject) => {
+    let callbackName = (options.callbackName + Math.random()).replace(".", "");
+    options.data[options.callback] = callbackName;      
+
+    let params = formatParams(options.data);
+    let ohead = document.getElementsByTagName('head')[0]
+    let os = document.createElement('script')
+    ohead.appendChild(os)
+    callbackName = callbackName.split('0')[0]
+    window[callbackName] = function (result) {
+      // ohead.removeChild(os)
+      // clearTimeout(os.timer)
+      // window[callbackName] = null
+      // options.success && options.success(result)
+      delete window[callbackName]
+      document.body.removeChild(jsNode)
+      clearTimeout(os.timer)
+      if (result) {
+        resolve(result)
+      } else {
+        reject('没有返回数据')
+      }
+    }
+    os.src = options.url + '?' + params
+    if (options.time) {
+      oS.timer = setTimeout(function () {
+          window[callbackName] = null;
+          oHead.removeChild(oS);
+          options.error && options.error({ message: "超时" });
+      }, options.time);
+    }
+    // js加载异常的情况 下面是添加到body中情况
+    // jsNode.addEventListener('error', () => {
+    //   delete window[callbackName]
+    //   document.body.removeChild(jsNode)
+    //   reject('JavaScript资源加载失败')
+    // }, false)
+    // 添加js节点到document上时，开始请求
+    // document.body.appendChild(jsNode)
+  return promise
+  })
+}
