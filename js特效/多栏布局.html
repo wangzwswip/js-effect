@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    #app {
+      height: 100%;
+      background: rgb(192, 192, 192);
+    }
+    .demo {
+      width: 300px;
+      background: #fff;
+      margin: 0 auto;
+      padding: 50px 10px;
+      columns: 10;
+      column-rule: 1px dashed rgb(213,213,213);
+      direction: rtl;
+      word-wrap: break-word;
+      text-align: center;
+    }
+    .demo2 {
+      width: 300px;
+      height: 130px;
+      background: #fff;
+      margin: 10px auto;
+      line-height: 30px;
+      font-size: 16px;
+      letter-spacing: 1px;
+      writing-mode:vertical-rl;
+      background: repeating-linear-gradient(to left, #000, #000 3%, #FFF 3%, #FFF);
+      background-size: 30px 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div id ="app">
+    <div class="demo">其实看到这种多栏布局，我第一时间想到的是.古书的排版，那么我们可以采用这种分,栏布局实现古书的?排版方式</div>
+    <div class="demo2">其实看到这种多栏布局，我第一时间想到的是.古书的排版，那么我们可以采用这种分,栏布局实现古书的?排版方式</div>
+  </div>
+
+  <script>
+  </script>
+</body>
+
+</html>
